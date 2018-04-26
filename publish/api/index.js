@@ -11,7 +11,11 @@ router.get('/', function (req, res) {
   })
 })
 
-router.get('/stackoverflow/:uid/tags', soController.getTags)
+router.get('/stackoverflow/:uid/topQuestionTags', soController.getTopQuestionTags)
+
+router.get('/stackoverflow/:uid/topAnswerTags', soController.getTopAnswerTags)
+
+router.get('/stackoverflow/:uid/reputationScore', soController.getReputationScore)
 
 router.get('/stackoverflow/:uid/questions', soController.getQuestionScore)
 
