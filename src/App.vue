@@ -1,7 +1,8 @@
 <template>
 <div id="app">
-  <img src="./assets/logo.png">
-  <router-link :to="{ name: 'Hello2' }">Hello2</router-link>
+  <!-- <img src="./assets/logo.png"> -->
+  <router-link :to="{ name: 'Test' }">Test</router-link>
+  <router-link :to="{ name: 'Profile' }">Profile</router-link>
   <router-view/>
 </div>
 </template>
@@ -22,7 +23,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }

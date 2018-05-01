@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const soController = require('./stackoverflow')
+const githubController = require('./github')
 
 router.get('/', function (req, res) {
   res.json({
@@ -11,14 +12,16 @@ router.get('/', function (req, res) {
   })
 })
 
-router.get('/stackoverflow/:uid/topQuestionTags', soController.getTopQuestionTags)
+router.get('/stackoverflow/:uid/topquestiontags', soController.getTopQuestionTags)
 
-router.get('/stackoverflow/:uid/topAnswerTags', soController.getTopAnswerTags)
+router.get('/stackoverflow/:uid/topanswertags', soController.getTopAnswerTags)
 
-router.get('/stackoverflow/:uid/reputationScore', soController.getReputationScore)
+router.get('/stackoverflow/:uid/user', soController.getUser)
 
-router.get('/stackoverflow/:uid/questions', soController.getQuestionScore)
+router.get('/github/:uid/mergedpullrequests', githubController.getMergedPullRequests)
 
-router.get('/stackoverflow/:uid/answers', soController.getAnswerScore)
+// router.get('/github/:uid/pullrequests', githubController.pullrequests)
+//
+// router.get('/github/:uid/codequality', githubController.codequality)
 
 module.exports = router

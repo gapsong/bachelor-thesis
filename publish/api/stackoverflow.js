@@ -26,21 +26,8 @@ exports.getTopAnswerTags = function (req, res) {
   })
 }
 
-exports.getQuestionScore = function (req, res) {
-  return request(stackexchangeAPI + '/users/' + req.params.uid + '/questions?order=desc&sort=activity&site=stackoverflow').then((item) => {
-    return res.json(item)
-  })
-}
-
-exports.getReputationScore = function (req, res) {
+exports.getUser = function (req, res) {
   return request(stackexchangeAPI + '/users/' + req.params.uid + '?order=desc&sort=reputation&site=stackoverflow').then((item) => {
-    return res.json(item)
-    // res.json(item.items[0].reputation)
-  })
-}
-
-exports.getAnswerScore = function (req, res) {
-  return request(stackexchangeAPI + '/users/' + req.params.uid + '/answers?order=desc&sort=activity&site=stackoverflow').then((item) => {
     return res.json(item)
   })
 }
