@@ -16,9 +16,11 @@ router.get('/stackoverflow/:uid/topquestiontags', soController.getTopQuestionTag
 
 router.get('/stackoverflow/:uid/topanswertags', soController.getTopAnswerTags)
 
-router.get('/stackoverflow/:uid/user', soController.getUser)
+router.get('/stackoverflow/:uid', soController.getUser)
 
 router.get('/github/:uid/mergedpullrequests', githubController.getMergedPullRequests)
+
+router.get('/github/:uid', githubController.getUser)
 
 // router.get('/github/:uid/pullrequests', githubController.pullrequests)
 //

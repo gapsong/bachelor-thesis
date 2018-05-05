@@ -19,6 +19,14 @@ exports.getMergedPullRequests = function (req, res) {
   })
 }
 
+exports.getUser = function (req, res) {
+  // request tostackoverflow to get all the answers
+  return request(githubAPI + 'users/' + req.params.uid).then((user) => {
+    console.log(user)
+    return res.json(user)
+  })
+}
+
 // exports.getTopAnswerTags = function (req, res) {
 //   // request tostackoverflow to get all the answers
 //   return request(githubAPI + '/users/' + req.params.uid + '/top-answer-tags?site=stackoverflow').then((answers) => {

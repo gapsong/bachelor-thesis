@@ -1,5 +1,5 @@
 <template>
-<div id="app">
+<div class="box" id="app">
   <!-- <img src="./assets/logo.png"> -->
   <router-link :to="{ name: 'Test' }">Test</router-link>
   <router-link :to="{ name: 'Profile' }">Profile</router-link>
@@ -25,5 +25,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 60px;
+}
+.box {
+  margin:25px
 }
 </style>

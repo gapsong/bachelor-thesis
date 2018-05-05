@@ -13,6 +13,8 @@ export const store = new Vuex.Store({
       {id: 1, name: 'Max', registered: false},
       {id: 2, name: 'Peter', registered: false}
     ],
+    soUser: {},
+    gitUser: {},
     toptags: []
   },
   getters,
