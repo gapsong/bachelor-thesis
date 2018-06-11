@@ -2,20 +2,21 @@
     <div class="feed">
         <div class="header-wrapper">
             <div class="header">
+                <h3>1290</h3>
                 <div class="github-icon">
                     <span class="github-octicon octicon octicon-mark-github"></span>
                 </div>
-                <!-- <a :href="user.html_url" target="_blank" class="github-profile">
+                <a :href="user.html_url" target="_blank" class="github-profile">
                     <div style="font-size: 26px; line-height: 30px">
                         {{user.name}}
                     </div>
                     <div class="github-username">
                         {{user.login}}
                     </div>
-                </a> -->
-                <!-- <div class="avatar-wrapper">
+                </a>
+                <div class="avatar-wrapper">
                     <img class="avatar" :src="user.avatar_url" />
-                </div> -->
+                </div>
             </div>
         </div>
         <div class="events-wrapper">
@@ -38,7 +39,7 @@
         </div>
         <div class="footer-wrapper">
             <p style="display: inline">Public Activity</p>
-            <a style="float: right; color: #232323" target="_blank" href="https://github.com/lexmartinez/vue-github-activity">GitHub Activity Feed</a>
+            <!-- <a style="float: right; color: #232323" target="_blank" href="https://github.com/lexmartinez/vue-github-activity">GitHub Activity Feed</a> -->
         </div>
     </div>
 </template>

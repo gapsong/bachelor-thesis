@@ -1,3 +1,4 @@
 build/*.js
 config/*.js
-src/components/Profile/Activity.vue
+src/components/Profile/services/calendar-heatmap.js
+src/components/Profile/VuejsHeatmap.vue

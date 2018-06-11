@@ -22,6 +22,14 @@ router.get('/github/:uid/mergedpullrequests', githubController.getMergedPullRequ
 
 router.get('/github/:uid', githubController.getUser)
 
+router.get('/github/:uid/repos', githubController.getRepos)
+
+router.get('/github/:uid/commits', githubController.getCommits)
+
+router.get('/github/:uid/issues', githubController.getIssues)
+
+router.get('/github/:uid/comments', githubController.getComments)
+
 // router.get('/github/:uid/pullrequests', githubController.pullrequests)
 //
 // router.get('/github/:uid/codequality', githubController.codequality)
