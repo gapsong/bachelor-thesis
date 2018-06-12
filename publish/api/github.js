@@ -1,12 +1,13 @@
 var rp = require('request-promise')
 const githubAPI = 'https://api.github.com/'
+var dotenv = require('dotenv')
 
 function request(uri) {
   return rp({
     uri: uri,
     headers: {
       'User-Agent': 'Request-Promise',
-      Authorization: 'token 01bd1bacf9c63ff4c22b9bd73f29ae637efde1ac'
+      Authorization: process.env.TOKEN_SECRET
     },
     gzip: true,
     json: true // Automatically parses the JSON string in the response
@@ -96,7 +97,7 @@ exports.getComments = function(req, res) {
     })).then((comments) => {
       var temp = comments.reduce((acc, cur) => {
         cur = cur.filter((item) => {
-          console.log(item.user.login, req.params.uid)
+          // console.log(item.user.login, req.params.uid)
           return (req.params.uid == item.user.login)
         })
         return acc.concat(cur)

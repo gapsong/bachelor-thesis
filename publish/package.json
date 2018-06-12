@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "express": "4.14.0",
+    "dotenv": "^2.0.0",
     "get-user-commits": "^1.0.7",
     "github-commits": "0.0.10",
     "request": "^2.85.0",
