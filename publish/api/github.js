@@ -1,13 +1,13 @@
 var rp = require('request-promise')
 const githubAPI = 'https://api.github.com/'
-var dotenv = require('dotenv')
 
 function request(uri) {
   return rp({
     uri: uri,
     headers: {
       'User-Agent': 'Request-Promise',
-      Authorization: process.env.TOKEN_SECRET
+      'Authorization': process.env.TOKEN_SECRET,
+      'Accept': 'application/vnd.github.cloak-preview'
     },
     gzip: true,
     json: true // Automatically parses the JSON string in the response
@@ -29,7 +29,7 @@ exports.getUser = function(req, res) {
   })
 }
 
-function getRepos(uid){
+function getRepos(uid) {
   return request(githubAPI + 'users/' + uid + '/repos').then((repos) => {
     return repos
   })
@@ -42,6 +42,20 @@ exports.getRepos = function(req, res) {
   })
 }
 
+exports.getLangs = function(req, res) {
+  // get repos
+  return getRepos(req.params.uid).then((repos) => {
+    return Promise.all(repos.map((item) => {
+      return request(item.languages_url)
+    })).then((languages) => {
+      var temp = languages.reduce((acc, cur) => {
+        return Object.assign(acc, cur)
+      }, {})
+      return res.json(temp)
+    })
+  })
+}
+
 var GitHubCommits = require('github-commits')
 var gitHubCommits = new GitHubCommits()
 
@@ -51,7 +65,7 @@ exports.getCommits = function(req, res) {
   })
 }
 
-function getIssues(uid){
+function getIssues(uid) {
   return request(githubAPI + 'users/' + uid + '/repos').then((repos) => {
     return Promise.all(repos.map((item) => {
       return request(githubAPI + 'repos/' + uid + '/' + item.name + '/issues?creator=' + uid)
@@ -65,11 +79,11 @@ function getIssues(uid){
 
 exports.getIssues = function(req, res) {
   return getIssues(req.params.uid).then((issues) => {
-      return res.json(issues)
+    return res.json(issues)
   })
 }
 
-function getCommentsFromIssues(uid){
+function getCommentsFromIssues(uid) {
   return getIssues(uid).then((issues) => {
     return Promise.all(issues.map((item) => {
       return request(item.url + '/comments')
@@ -82,7 +96,7 @@ function getCommentsFromIssues(uid){
   })
 }
 
-function getCommentsFromRepos(uid){
+function getCommentsFromRepos(uid) {
   return getRepos(req.params.uid).then((repos) => {
     return repos
   })
@@ -90,7 +104,7 @@ function getCommentsFromRepos(uid){
 
 exports.getComments = function(req, res) {
   // https://api.github.com/search/issues?q=commenter:gapsong
-  return request(githubAPI + 'search/issues?q=commenter:' + req.params.uid).then((comments) => {
+  return request(githubAPI + 'search/issues?q=commenter:' + req.params.uid + '&per_page=100').then((comments) => {
     // return res.json(comments)
     return Promise.all(comments.items.map((item) => {
       return request(item.comments_url)
@@ -105,6 +119,12 @@ exports.getComments = function(req, res) {
 
       return res.json(temp)
     })
+  })
+}
+
+exports.getCommits = function(req, res) {
+  return request(githubAPI + 'search/commits?q=author-name:' + req.params.uid + '&merge:true&per_page=100').then((mergedPR) => {
+    return res.json(mergedPR)
   })
 }
 

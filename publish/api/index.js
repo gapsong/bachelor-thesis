@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const soController = require('./stackoverflow')
 const githubController = require('./github')
+require('dotenv').load();
 
 router.get('/', function (req, res) {
   res.json({
@@ -14,11 +15,15 @@ router.get('/', function (req, res) {
 
 router.get('/stackoverflow/:uid/topquestiontags', soController.getTopQuestionTags)
 
+router.get('/stackoverflow/:uid/acceptedanswers', soController.getAcceptedAnswers)
+
 router.get('/stackoverflow/:uid/topanswertags', soController.getTopAnswerTags)
 
 router.get('/stackoverflow/:uid', soController.getUser)
 
 router.get('/github/:uid/mergedpullrequests', githubController.getMergedPullRequests)
+
+router.get('/github/:uid/langs', githubController.getLangs)
 
 router.get('/github/:uid', githubController.getUser)
 
