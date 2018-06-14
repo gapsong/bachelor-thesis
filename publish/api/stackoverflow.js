@@ -13,8 +13,8 @@ function request (uri) {
 }
 
 function downloadAll(acc, url, page){
-  return request(url + '/answers?page='+ page +'&pagesize=100&order=desc&sort=activity&site=stackoverflow&key=' + process.env.SO_SECRET).then((answer) => {
-    console.log(acc)
+  var uri =  url + '?page='+ page +'&pagesize=100&site=stackoverflow&key=' + process.env.SO_SECRET
+  return request(uri).then((answer) => {
     if(!answer.has_more || answer.quota_remaining == 0)
       return acc.concat(answer.items)
     else
@@ -22,39 +22,40 @@ function downloadAll(acc, url, page){
   })
 }
 
+function startDownload(url){
+  return downloadAll([], url, 1)
+}
+
 exports.getTopQuestionTags = function (req, res) {
-  // request tostackoverflow to get all the answers
-  return request(stackexchangeAPI + '/users/' + req.params.uid + '/top-question-tags?site=stackoverflow&key=' + process.env.SO_SECRET).then((answers) => {
+  var uri = stackexchangeAPI + '/users/' + req.params.uid + '/top-question-tags'
+
+  return startDownload(uri).then((answers) => {
     return res.json(answers)
   })
 }
 
 exports.getTopAnswerTags = function (req, res) {
-  // request tostackoverflow to get all the answers
-  return request(stackexchangeAPI + '/users/' + req.params.uid + '/top-answer-tags?site=stackoverflow&key='  + process.env.SO_SECRET).then((answers) => {
+  var uri = stackexchangeAPI + '/users/' + req.params.uid + '/top-answer-tags'
+
+  return startDownload(uri).then((answers) => {
     return res.json(answers)
   })
 }
 
 exports.getAcceptedAnswers = function (req, res) {
-  // request tostackoverflow to get all the answers
-  // TODO works but has to iterate through all pages for all requests only 30 per page
-  var uri = stackexchangeAPI + '/users/' + req.params.uid
-  return downloadAll([], uri, 1).then((answers) => {
-    return res.json(answers)
+  var uri = stackexchangeAPI + '/users/' + req.params.uid + '/answers'
+
+  return startDownload(uri).then((answers) => {
+    return res.json(answers.filter((item) => {
+      return item.is_accepted
+    }))
   })
 }
 
-// exports.getAcceptedAnswers = function (req, res) {
-//   // request tostackoverflow to get all the answers
-//   // TODO works but has to iterate through all pages for all requests only 30 per page
-//   return request(stackexchangeAPI + '/users/' + req.params.uid + '/answers?order=desc&sort=activity&site=stackoverflow').then((answers) => {
-//     return res.json(answers)
-//   })
-// }
-
 exports.getUser = function (req, res) {
-  return request(stackexchangeAPI + '/users/' + req.params.uid + '?order=desc&sort=reputation&site=stackoverflow' + process.env.SO_SECRET).then((item) => {
-    return res.json(item)
+  var uri = stackexchangeAPI + '/users/' + req.params.uid
+
+  return startDownload(uri).then((user) => {
+    return res.json(user)
   })
 }
