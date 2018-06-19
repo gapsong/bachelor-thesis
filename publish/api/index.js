@@ -27,6 +27,8 @@ router.get('/github/:uid/langs', githubController.getLangs)
 
 router.get('/github/:uid', githubController.getUser)
 
+router.get('/github/:uid/followers', githubController.getFollowers)
+
 router.get('/github/:uid/repos', githubController.getRepos)
 
 router.get('/github/:uid/commits', githubController.getCommits)
