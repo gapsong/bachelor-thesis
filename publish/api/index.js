@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const soController = require('./stackoverflow')
+const soControllerMetric = require('./stackoverflowMetric')
 const githubController = require('./github')
+const metricController = require('./metric')
 require('dotenv').load();
 
 router.get('/', function (req, res) {
@@ -20,6 +22,12 @@ router.get('/stackoverflow/:uid/acceptedanswers', soController.getAcceptedAnswer
 router.get('/stackoverflow/:uid/topanswertags', soController.getTopAnswerTags)
 
 router.get('/stackoverflow/:uid', soController.getUser)
+
+router.get('/stackoverflow/:uid/qualityofwork', soControllerMetric.qualityOfWork)
+
+router.get('/metric', metricController.getMetric)
+
+router.get('/github/:uid/qualityofwork', soControllerMetric.qualityOfWork)
 
 router.get('/github/:uid/mergedpullrequests', githubController.getMergedPullRequests)
 

@@ -135,7 +135,6 @@ exports.getComments = function(req, res) {
     })).then((comments) => {
       var temp = comments.reduce((acc, cur) => {
         cur = cur.filter((item) => {
-          // console.log(item.user.login, req.params.uid)
           return (req.params.uid == item.user.login)
         })
         return acc.concat(cur)
@@ -147,7 +146,9 @@ exports.getComments = function(req, res) {
 }
 
 exports.getCommits = function(req, res) {
-  return request(githubAPI + '/search/commits?q=author-name:' + req.params.uid + '&merge:true&per_page=100').then((mergedPR) => {
-    return res.json(mergedPR)
+  var uri = '/search/commits?q=author-name:'
+  var params = '?q=author-name:' + req.params.uid + '&merge:true'
+  return downloadAll([], uri, params, 1).then((answers) => {
+    return res.json(answers)
   })
 }
