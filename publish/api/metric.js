@@ -14,16 +14,16 @@ function request(uri) {
   })
 }
 
-//returns object in wrapper
-function downloadAllWrapper(acc, url, params, page){
-  var uri =  githubAPI + url + '?&page=' + page + '&per_page=99' + params
-  return request(uri).then((response) => {
-    if(response.items.length == 0 || page == 10) //10 pages is max
-      return acc.concat(response.items)
-    else
-      return downloadAllWrapper(acc.concat(response.items), url, params, page + 1)
-  })
-}
+// //returns object in wrapper
+// function downloadAllWrapper(acc, url, params, page){
+//   var uri =  githubAPI + url + '?&page=' + page + '&per_page=99' + params
+//   return request(uri).then((response) => {
+//     if(response.items.length == 0 || page == 10) //10 pages is max
+//       return acc.concat(response.items)
+//     else
+//       return downloadAllWrapper(acc.concat(response.items), url, params, page + 1)
+//   })
+// }
 
 //returns object in array
 function downloadAll(acc, url, page){
@@ -45,25 +45,39 @@ function getRepos(uid){
 }
 
 function getCommits(uid){
-  var uri = '/search/commits'
-  var params = '&q=author-name:' + uid + '&merge:true'
-  return downloadAllWrapper([], uri, params, 1).then((answers) => {
-    return answers
+  var uri = githubAPI + '/search/commits?&q=committer:' + uid + '&merge:true'
+  return request(uri).then((response) => {
+    return response.total_count
   })
 }
 
 function getIssues(uid){
-  var uri = '/search/commits'
-  var params = '&q=author-name:' + uid
-  return downloadAllWrapper([], uri, params, 1).then((answers) => {
-    return answers
+  var uri = githubAPI + '/search/issues?&page=1&per_page=99&q=commenter:'+ uid +'&sort=created&order=asc'
+  return request(uri).then((response) => {
+    return response.total_count
+  })
+}
+
+function getComments(uid){
+  return request(githubAPI + '/search/issues?q=commenter:' + uid + '&per_page=100').then((comments) => {
+    return Promise.all(comments.items.map((item) => {
+      return request(item.comments_url)
+    })).then((comments) => {
+      var temp = comments.reduce((acc, cur) => {
+        cur = cur.filter((item) => {
+          return (uid == item.user.login)
+        })
+        return acc.concat(cur)
+      }, [])
+      return temp.length
+    })
   })
 }
 
 exports.getMetric = function (req, res) {
-  var uid = 'gapsong' //andrew
+  var uid = 'andrew' //andrew
 
-  return Promise.all([getRepos(uid), getCommits(uid), getIssues(uid)])
+  return Promise.all([getRepos(uid), getCommits(uid), getIssues(uid), getComments(uid)])
     .then(values => {
       return res.json(values)
     });
