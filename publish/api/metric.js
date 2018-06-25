@@ -74,10 +74,52 @@ function getComments(uid){
   })
 }
 
-exports.getMetric = function (req, res) {
-  var uid = 'andrew' //andrew
+function showObject(obj) {
+  var result = [];
+  for (var p in obj) {
+    if( obj.hasOwnProperty(p) ) {
+      result.push(p, obj[p])
+    }
+  }
+  return result;
+}
 
-  return Promise.all([getRepos(uid), getCommits(uid), getIssues(uid), getComments(uid)])
+function fold(array) {
+  var temp = []
+  return array.reduce((acc, cur) => {
+    if(cur.hasOwnProperty(p)) {
+      return Object.assign(acc, {[p]:cur[p]})
+    }
+  }, {})
+}
+
+function addParams(array) {
+  return array.reduce((acc, item) => {
+    for (var p in item) {
+      if (acc.hasOwnProperty(p))
+        acc[p] = acc[p] + item[p]
+      else
+        acc[p] = item[p]
+    }
+    return acc
+  }, {})
+}
+
+
+function getTags(uid){
+  return getRepos(uid).then((repos) => {
+    return Promise.all(repos.map((item) => {
+      return request(item.languages_url)
+    })).then((languages) => {
+      return addParams(languages)
+    })
+  })
+}
+
+exports.getMetric = function (req, res) {
+  var uid = 'gapsong' //andrew
+
+  return Promise.all([getRepos(uid), getCommits(uid), getIssues(uid), getComments(uid), getTags(uid)])
     .then(values => {
       return res.json(values)
     });
