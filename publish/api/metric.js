@@ -14,11 +14,11 @@ function request(uri) {
   })
 }
 
-// //returns object in wrapper
+// returns object in wrapper
 // function downloadAllWrapper(acc, url, params, page){
 //   var uri =  githubAPI + url + '?&page=' + page + '&per_page=99' + params
 //   return request(uri).then((response) => {
-//     if(response.items.length == 0 || page == 10) //10 pages is max
+//     if(response.items.length == 0 || page == 10) 10 pages is max
 //       return acc.concat(response.items)
 //     else
 //       return downloadAllWrapper(acc.concat(response.items), url, params, page + 1)
@@ -26,39 +26,53 @@ function request(uri) {
 // }
 
 //returns object in array
-function downloadAll(acc, url, page){
-  var uri =  githubAPI + url + '?&page=' + page + '&per_page=99'
+function downloadAll(acc, url, page) {
+  var uri = githubAPI + url + '?&page=' + page + '&per_page=99'
   return request(uri).then((response) => {
-    if(response.length == 0 || page == 10) //10 pages is max
+    if (response.length == 0 || page == 10) //10 pages is max
       return acc.concat(response)
     else
       return downloadAll(acc.concat(response), url, page + 1)
   })
 }
 
-function getRepos(uid){
+function getRepos(uid) {
   var url = '/users/' + uid + '/repos'
   var params = ''
-  return downloadAll([], url, 1).then((answers) =>{
+  return downloadAll([], url, 1).then((answers) => {
     return answers
   })
 }
 
-function getCommits(uid){
-  var uri = githubAPI + '/search/commits?&q=committer:' + uid + '&merge:true'
+function getMergedCommits(uid) {
+  var uri = githubAPI + '/search/commits?&q=committer:' + uid + '+merge:true'
   return request(uri).then((response) => {
     return response.total_count
   })
 }
 
-function getIssues(uid){
-  var uri = githubAPI + '/search/issues?&page=1&per_page=99&q=commenter:'+ uid +'&sort=created&order=asc'
+function getUnmergedCommits(uid) {
+  var uri = githubAPI + '/search/commits?&q=committer:' + uid + '+merge:false'
   return request(uri).then((response) => {
     return response.total_count
   })
 }
 
-function getComments(uid){
+function getCommits(uid) {
+  var uri = githubAPI + '/search/commits?&q=committer:' + uid
+  return request(uri).then((response) => {
+    return response.total_count
+  })
+}
+
+function getIssues(uid) {
+  var uri = githubAPI + '/search/issues?&page=1&per_page=99&q=commenter:' + uid + '&sort=created&order=asc'
+  return request(uri).then((response) => {
+    return response.total_count
+  })
+}
+
+function getCommentsIssues(uid) {
   return request(githubAPI + '/search/issues?q=commenter:' + uid + '&per_page=100').then((comments) => {
     return Promise.all(comments.items.map((item) => {
       return request(item.comments_url)
@@ -74,10 +88,34 @@ function getComments(uid){
   })
 }
 
+function getCommentsCommits(uid) {
+  return request(githubAPI + '/search/commits?q=commiter:' + uid + '&per_page=100').then((comments) => {
+    return Promise.all(comments.items.map((item) => {
+      return request(item.comments_url)
+    })).then((comments) => {
+      var temp = comments.reduce((acc, cur) => {
+        cur = cur.filter((item) => {
+          return (uid == item.user.login)
+        })
+        return acc.concat(cur)
+      }, [])
+      return temp.length
+    })
+  })
+}
+
+function getComments(uid) {
+  return Promise.all([getCommentsIssues(uid), getCommentsCommits(uid)]).then(comments => {
+    return comments.reduce(function(acc, cur) {
+      return acc + cur
+    }, 0)
+  })
+}
+
 function showObject(obj) {
   var result = [];
   for (var p in obj) {
-    if( obj.hasOwnProperty(p) ) {
+    if (obj.hasOwnProperty(p)) {
       result.push(p, obj[p])
     }
   }
@@ -87,8 +125,8 @@ function showObject(obj) {
 function fold(array) {
   var temp = []
   return array.reduce((acc, cur) => {
-    if(cur.hasOwnProperty(p)) {
-      return Object.assign(acc, {[p]:cur[p]})
+    if (cur.hasOwnProperty(p)) {
+      return Object.assign(acc, {[p]: cur[p]})
     }
   }, {})
 }
@@ -105,8 +143,7 @@ function addParams(array) {
   }, {})
 }
 
-
-function getTags(uid){
+function getTags(uid) {
   return getRepos(uid).then((repos) => {
     return Promise.all(repos.map((item) => {
       return request(item.languages_url)
@@ -116,11 +153,34 @@ function getTags(uid){
   })
 }
 
-exports.getMetric = function (req, res) {
+function getSize(uid) {
+  return getRepos(uid).then((repos) => {
+    return repos.reduce((acc, cur) => {
+      return acc + cur.size
+    }, 0)
+  })
+}
+
+function getFollowers(uid) {
+  var url = '/users/' + uid + '/followers'
+  return downloadAll([], url, 1).then((followers) => {
+    return followers.length
+  })
+}
+
+exports.getMetric = function(req, res) {
   var uid = 'gapsong' //andrew
 
-  return Promise.all([getRepos(uid), getCommits(uid), getIssues(uid), getComments(uid), getTags(uid)])
-    .then(values => {
-      return res.json(values)
-    });
+  return Promise.all([
+    getSize(uid),
+    getRepos(uid),
+    getIssues(uid),
+    getComments(uid),
+    getTags(uid),
+    getFollowers(uid),
+    getMergedCommits(uid),
+    getUnmergedCommits(uid)
+  ]).then(values => {
+    return res.json(values)
+  });
 }
