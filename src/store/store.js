@@ -15,7 +15,8 @@ export const store = new Vuex.Store({
     ],
     soUser: {},
     gitUser: {},
-    toptags: []
+    toptags: [],
+    metric: []
   },
   getters,
   mutations,

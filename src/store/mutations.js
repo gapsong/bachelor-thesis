@@ -12,5 +12,9 @@ export default {
   FETCH_GIT_USER: function (state, json) {
     state.gitUser = json
     return state
+  },
+  FETCH_METRIC: function (state, json) {
+    state.metric = json
+    return state
   }
 }

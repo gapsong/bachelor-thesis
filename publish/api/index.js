@@ -25,7 +25,7 @@ router.get('/stackoverflow/:uid', soController.getUser)
 
 router.get('/stackoverflow/:uid/qualityofwork', soControllerMetric.qualityOfWork)
 
-router.get('/metric', metricController.getMetric)
+router.get('/metric/:uid', metricController.getMetric)
 
 router.get('/github/:uid/qualityofwork', soControllerMetric.qualityOfWork)
 

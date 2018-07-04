@@ -18,5 +18,8 @@ export default {
   },
   users (state) {
     return {}
+  },
+  metric (state) {
+    return state.metric
   }
 }

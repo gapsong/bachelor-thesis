@@ -169,8 +169,8 @@ function getFollowers(uid) {
 }
 
 exports.getMetric = function(req, res) {
-  var uid = 'gapsong' //andrew
-
+  // var uid = 'gapsong' //andrew
+  var uid = req.params.uid
   return Promise.all([
     getSize(uid),
     getRepos(uid),
