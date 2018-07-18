@@ -4,6 +4,7 @@ const soController = require('./stackoverflow')
 const soControllerMetric = require('./stackoverflowMetric')
 const githubController = require('./github')
 const metricController = require('./metric')
+const teamscaleController = require('./teamscale')
 require('dotenv').load();
 
 router.get('/', function (req, res) {
@@ -14,6 +15,10 @@ router.get('/', function (req, res) {
     }
   })
 })
+
+router.get('/teamscale', teamscaleController.getTeamscale)
+
+router.post('/teamscale/repo', teamscaleController.analyzeRepo)
 
 router.get('/stackoverflow/:uid/topquestiontags', soController.getTopQuestionTags)
 

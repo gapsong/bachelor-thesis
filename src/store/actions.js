@@ -39,5 +39,20 @@ export default {
     }).catch(function (ex) {
       console.log('parsing failed', ex)
     })
+  },
+  FETCH_TEAMSCALE_REPO (context, repoLink) {
+    return fetch('/api/teamscale/repo', {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        repoLink: repoLink
+      })
+    }).then(function (response) {
+      return response.json()
+    }).then(function (repoMetrics) {
+      return context.commit('FETCH_TEAMSCALE_REPO', {repoLink: repoLink, repoMetrics:repoMetrics})
+    })
   }
 }

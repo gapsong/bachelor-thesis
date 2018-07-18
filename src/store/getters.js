@@ -1,9 +1,4 @@
 export default {
-  nameUsers (state) {
-    return state.users.map(item => {
-      return item.name
-    })
-  },
   soUser (state) {
     return state.soUser[0]
   },
@@ -16,10 +11,10 @@ export default {
   gitUser (state) {
     return state.gitUser
   },
-  users (state) {
-    return {}
-  },
   metric (state) {
     return state.metric
+  },
+  repos (state) {
+    return state.repos
   }
 }

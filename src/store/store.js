@@ -8,15 +8,19 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    registrations: [],
-    users: [
-      {id: 1, name: 'Max', registered: false},
-      {id: 2, name: 'Peter', registered: false}
-    ],
     soUser: {},
     gitUser: {},
     toptags: [],
-    metric: []
+    repos: [],
+    metric: {
+      size: 0,
+      issues: 0,
+      comments: 0,
+      tags: {},
+      followers: 0,
+      mergedCommits: 0,
+      unmergedCommits: 0
+    }
   },
   getters,
   mutations,

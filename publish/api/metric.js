@@ -30,9 +30,9 @@ function downloadAll(acc, url, page) {
   var uri = githubAPI + url + '?&page=' + page + '&per_page=99'
   return request(uri).then((response) => {
     if (response.length == 0 || page == 10) //10 pages is max
-      return acc.concat(response)
+    return acc.concat(response)
     else
-      return downloadAll(acc.concat(response), url, page + 1)
+    return downloadAll(acc.concat(response), url, page + 1)
   })
 }
 
@@ -135,9 +135,9 @@ function addParams(array) {
   return array.reduce((acc, item) => {
     for (var p in item) {
       if (acc.hasOwnProperty(p))
-        acc[p] = acc[p] + item[p]
+      acc[p] = acc[p] + item[p]
       else
-        acc[p] = item[p]
+      acc[p] = item[p]
     }
     return acc
   }, {})
@@ -181,6 +181,17 @@ exports.getMetric = function(req, res) {
     getMergedCommits(uid),
     getUnmergedCommits(uid)
   ]).then(values => {
-    return res.json(values)
-  });
-}
+    return res.json({repos: values[1],
+      metric:{
+        size: values[0],
+        issues: values[2],
+        comments: values[3],
+        tags: values[4],
+        followers: values[5],
+        mergedCommits:values[6],
+        unmergedCommits:values[7],
+        simpleMetric: values[0] + values[1].length + values[2] + values[3]
+        + values[5] + values[6] + values[7]
+      }})
+    })
+  }

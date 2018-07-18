@@ -1,16 +1,18 @@
 <template>
 <div class="hello">
-  <h1>{{ msg }}</h1>
+  <StackoverflowView/>
+  <GithubView/>
 </div>
 </template>
 
 <script>
+import GithubView from './github/GithubView'
+import StackoverflowView from './stackoverflow/StackoverflowView'
+
 export default {
-  name: 'hello',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
+  components:{
+    GithubView,
+    StackoverflowView
   }
 }
 </script>
