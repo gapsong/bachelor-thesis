@@ -89,7 +89,7 @@ function getCommentsIssues(uid) {
 }
 
 function getCommentsCommits(uid) {
-  return request(githubAPI + '/search/commits?q=commiter:' + uid + '&per_page=100').then((comments) => {
+  return request(githubAPI + '/search/commits?q=committer:' + uid + '&per_page=100').then((comments) => {
     return Promise.all(comments.items.map((item) => {
       return request(item.comments_url)
     })).then((comments) => {
@@ -168,8 +168,31 @@ function getFollowers(uid) {
   })
 }
 
+function getMergedPullRequests(uid) {
+  return request('https://api.github.com/search/issues?&page=1&per_page=99&q=type:pr+involves:'+ uid +'+is:merged&sort=created&order=asc%27').then((json)=>{
+    return json.total_count
+  })
+}
+
+function getTotalPullRequests(uid) {
+  return request('https://api.github.com/search/issues?&page=1&per_page=99&q=type:pr+involves:'+ uid +'&sort=created&order=asc%27').then((json)=>{
+    return json.total_count
+  })
+}
+
 exports.getMetric = function(req, res) {
   // var uid = 'gapsong' //andrew
+  const avgScore = 1500
+  const userSum = 15436
+
+  const sizeParam = 2046098925 * avgScore / userSum
+  const repoParam = 108306 * avgScore / userSum
+  const commitsParam = 1087345 * avgScore / userSum
+  const issuesParam = 55154 * avgScore / userSum
+  const issueCommentsParam = 105027 * avgScore / userSum
+  const followersParam = 1228 * avgScore / userSum
+  const unmergedParam = 36189 * avgScore / userSum
+  const mergedParam = 28814 * avgScore / userSum
   var uid = req.params.uid
   return Promise.all([
     getSize(uid),
@@ -179,19 +202,29 @@ exports.getMetric = function(req, res) {
     getTags(uid),
     getFollowers(uid),
     getMergedCommits(uid),
-    getUnmergedCommits(uid)
+    getUnmergedCommits(uid),
+    getMergedPullRequests(uid),
+    getTotalPullRequests(uid)
   ]).then(values => {
-    return res.json({repos: values[1],
+    var score = sizeParam * values[0]
+    + repoParam * values[1].length
+    + issuesParam * values[2]
+    + issueCommentsParam * values[3]
+    + followersParam * values[5]
+    + commitsParam * (values[6] + values[7])
+    return res.json({
+      repos: values[1],
       metric:{
         size: values[0],
         issues: values[2],
         comments: values[3],
         tags: values[4],
         followers: values[5],
-        mergedCommits:values[6],
-        unmergedCommits:values[7],
-        simpleMetric: values[0] + values[1].length + values[2] + values[3]
-        + values[5] + values[6] + values[7]
+        commits: values[6] + values[7],
+        mergedPR: values[8],
+        unmergedPR: values[9] - values[8],
+        simpleMetric:
+        score
       }})
     })
   }

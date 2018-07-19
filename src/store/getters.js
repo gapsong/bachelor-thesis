@@ -1,6 +1,6 @@
 export default {
   soUser (state) {
-    return state.soUser[0]
+    return state.soUser
   },
   registrations (state) {
     return state.registrations

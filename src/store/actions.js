@@ -12,11 +12,11 @@ export default {
       console.log('parsing failed', ex)
     })
   },
-  FETCH_SO_USER (context) {
-    return fetch('/api/stackoverflow/1447296').then(function (response) {
+  FETCH_SO_USER (context, uid) {
+    return fetch('/api/stackoverflow/' + uid).then(function (response) {
       return response.json()
     }).then(function (json) {
-      return context.commit('FETCH_SO_USER', json)
+      return context.commit('FETCH_SO_USER', json[0])
     }).catch(function (ex) {
       console.log('parsing failed', ex)
     })
@@ -35,6 +35,7 @@ export default {
     return fetch('/api/metric/' + uid).then(function (response) {
       return response.json()
     }).then(function (json) {
+      console.log(json)
       return context.commit('FETCH_METRIC', json)
     }).catch(function (ex) {
       console.log('parsing failed', ex)

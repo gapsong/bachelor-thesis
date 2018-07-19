@@ -11,8 +11,7 @@
     <div>Comments: {{metric.comments}}</div>
     <div>Tags: {{metric.tags}}</div>
     <div>Followers: {{metric.followers}}</div>
-    <div>Unmerged Commits: {{metric.unmergedCommits}}</div>
-    <div>Merged Commits: {{metric.mergedCommits}}</div>
+    <div>Commits: {{metric.commits}}</div>
     <hr/>
     <h3>Repositories</h3>
     <Repositories />

@@ -5,8 +5,8 @@ export default {
   FETCH_TAGS: function (state, res) {
     return state.toptags.push(res.items)
   },
-  FETCH_SO_USER: function (state, res) {
-    state.soUser = res.items
+  FETCH_SO_USER: function (state, json) {
+    state.soUser = json
     return state
   },
   FETCH_GIT_USER: function (state, json) {
@@ -26,7 +26,6 @@ export default {
         return item
       }
     })
-
     return Object.assign({}, state)
   }
 }

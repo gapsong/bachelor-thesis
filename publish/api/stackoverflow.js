@@ -54,7 +54,6 @@ exports.getAcceptedAnswers = function (req, res) {
 
 exports.getUser = function (req, res) {
   var uri = stackexchangeAPI + '/users/' + req.params.uid
-
   return startDownload(uri).then((user) => {
     return res.json(user)
   })

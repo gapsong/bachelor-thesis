@@ -1,9 +1,10 @@
 <template>
     <b-card>
       <h1>Stackoverflow Metric</h1>
-      <input v-model="stackoverflowName" placeholder="Type in Name">
-      <p>User is: {{ stackoverflowName }}</p>
-      <button v-on:click="onClick(stackoverflowName)">get User</button>
+      <input v-model="soID" placeholder="Type in the Stackoverflow ID">
+      <p>User is: {{ soID }}</p>
+      <button v-on:click="onClick(soID)">get User</button>
+      {{soUser}}
     </b-card>
 </template>
 
@@ -16,11 +17,16 @@ export default {
   },
   data () {
     return {
-      stackoverflowName: 'gapsong'
+      soID: '9619465'
     }
   },
   computed: {
-    ...mapGetters([]),
+    ...mapGetters(['soUser']),
+  },
+  methods: {
+    onClick(soID){
+      this.$store.dispatch('FETCH_SO_USER', soID)
+    }
   }
 }
 </script>
