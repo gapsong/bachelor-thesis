@@ -206,6 +206,7 @@ exports.getMetric = function(req, res) {
     getMergedPullRequests(uid),
     getTotalPullRequests(uid)
   ]).then(values => {
+    // TODO calculcation has to get fixed
     var score = sizeParam * values[0]
     + repoParam * values[1].length
     + issuesParam * values[2]

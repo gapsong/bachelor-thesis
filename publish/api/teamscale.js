@@ -55,13 +55,13 @@ function createAccount(repourl) {
 }
 
 function getMetrics(hash) {
-  return request("http://localhost:8081/p/" + hash +"/metrics").then((item) => {
+  return request("http://localhost:8081/p/" + hash + "/metrics").then((item) => {
     return item
   })
 }
 
 function getMetricSchema(hash) {
-  return request("http://localhost:8081/p/" + hash +"/metric-schema").then((item) => {
+  return request("http://localhost:8081/p/" + hash + "/metric-schema").then((item) => {
     return item
   })
 }
@@ -84,7 +84,7 @@ exports.analyzeRepo = function(req, res) {
   }).then((hash) => {
     return Promise.all([getMetrics(hash), getMetricSchema(hash)]).then((item) => {
       var temp = item[1].entries.map((entries, index) => {
-        return {[entries.name]: item[0].metricValues[index]}
+        return [entries.name, item[0].metricValues[index]]
       })
       return res.send(temp) //TODO merge the metric
     })

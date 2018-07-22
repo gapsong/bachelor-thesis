@@ -11,7 +11,12 @@
       </template>
       <template slot="row-details" slot-scope="row">
         <b-card>
-          {{row.item.repoMetrics}}
+          <div v-for="met in row.item.repoMetrics">
+          {{met[0]}}:
+          <Bar v-if="met[1].mapping != null" :data = "met[1].mapping" :height="50"/>
+          <a v-else>{{met[1]}}</a>
+        </div>
+          <!-- {{row.item.repoMetrics}} -->
         </b-card>
       </template>
     </b-table>
@@ -21,8 +26,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Bar from './Bar'
+
 
 export default {
+  components:{
+    Bar
+  },
   data () {
     return {
       fields:['name', 'show_details']
