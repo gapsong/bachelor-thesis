@@ -19,7 +19,8 @@ export const store = new Vuex.Store({
       tags: {},
       followers: 0,
       mergedCommits: 0,
-      unmergedCommits: 0
+      unmergedCommits: 0,
+      splittedMetric:[0, 0, 0, 0, 0, 0, 0]
     }
   },
   getters,

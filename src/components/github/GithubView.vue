@@ -5,7 +5,8 @@
     <p>User is: {{ githubName }}</p>
     <button v-on:click="onClick(githubName)">get User</button>
     <hr/>
-    <h2>Simplemetric is: {{computeSimpleMetric}}</h2>
+    <h2>TechnicalScore is: {{metric.simpleMetric}}</h2>
+    <LineChart :name="githubName" :data="metric.splittedMetric" :options="{responsive: true, maintainAspectRatio: false}" :height="50"/>
     <div>Size: {{metric.size}}</div>
     <div>Issues: {{metric.issues}}</div>
     <div>Comments: {{metric.comments}}</div>
@@ -21,10 +22,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import Repositories from './Repositories'
+import LineChart from './LineChart'
 
 export default {
   components:{
-    Repositories
+    Repositories,
+    LineChart
   },
   data () {
     return {
@@ -32,17 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['users', 'registrations', 'metric']),
-    computeSimpleMetric: function () {
-      // `this` points to the vm instance
-      return this.metric.size * 0.001 +
-      // this.metric.repos.length +
-      this.metric.issues +
-      this.metric.comments +
-      this.metric.followers +
-      this.metric.unmergedCommits +
-      this.metric.mergedCommits * 2
-    }
+    ...mapGetters(['metric'])
   },
   methods: {
     onClick(githubName) {

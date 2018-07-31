@@ -4,7 +4,8 @@
       <input v-model="soID" placeholder="Type in the Stackoverflow ID">
       <p>User is: {{ soID }}</p>
       <button v-on:click="onClick(soID)">get User</button>
-      {{soUser}}
+      <hr/>
+      <h2>CommunicationScore is: {{soUser.reputation}}</h2>
     </b-card>
 </template>
 

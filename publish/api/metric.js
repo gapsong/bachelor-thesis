@@ -182,17 +182,20 @@ function getTotalPullRequests(uid) {
 
 exports.getMetric = function(req, res) {
   // var uid = 'gapsong' //andrew
-  const avgScore = 1500
+  const avgScore = 1600
   const userSum = 15436
+  const points = avgScore / 7
+  // const totalsum = 2046098925 + 108306 + 1087345 + 55154 + 105027 + 1228 + 36189 + 28814
 
-  const sizeParam = 2046098925 * avgScore / userSum
-  const repoParam = 108306 * avgScore / userSum
-  const commitsParam = 1087345 * avgScore / userSum
-  const issuesParam = 55154 * avgScore / userSum
-  const issueCommentsParam = 105027 * avgScore / userSum
-  const followersParam = 1228 * avgScore / userSum
-  const unmergedParam = 36189 * avgScore / userSum
-  const mergedParam = 28814 * avgScore / userSum
+  const sizeParam = points / (2046098925 / userSum)
+  const repoParam =  points / (108306 / userSum)
+  const commitsParam = points / (1087345 / userSum)
+  const issuesParam = points / (55154 / userSum)
+  const issueCommentsParam = points / (105027 / userSum)
+  const followersParam = points / (1228 / userSum)
+  const mergedParam = points / (28814 / userSum)
+  const unmergedParam = points / (36189 / userSum)
+
   var uid = req.params.uid
   return Promise.all([
     getSize(uid),
@@ -207,12 +210,19 @@ exports.getMetric = function(req, res) {
     getTotalPullRequests(uid)
   ]).then(values => {
     // TODO calculcation has to get fixed
-    var score = sizeParam * values[0]
-    + repoParam * values[1].length
-    + issuesParam * values[2]
-    + issueCommentsParam * values[3]
-    + followersParam * values[5]
-    + commitsParam * (values[6] + values[7])
+    var splittedMetric = [
+      sizeParam * values[0],
+      repoParam * values[1].length,
+      issuesParam * values[2],
+      issueCommentsParam * values[3],
+      commitsParam * (values[6] + values[7]),
+      mergedParam * (values[8]),
+      unmergedParam * (values[9] - values[8])
+    ]
+    var score = splittedMetric.reduce((item, cur) => {
+      return item + cur
+    }, 0)
+
     return res.json({
       repos: values[1],
       metric:{
@@ -225,7 +235,8 @@ exports.getMetric = function(req, res) {
         mergedPR: values[8],
         unmergedPR: values[9] - values[8],
         simpleMetric:
-        score
+        Math.round(score),
+        splittedMetric: splittedMetric
       }})
     })
   }

@@ -1,6 +1,7 @@
 <template>
 <div class="hello">
   <StackoverflowView/>
+  <br/>
   <GithubView/>
 </div>
 </template>
