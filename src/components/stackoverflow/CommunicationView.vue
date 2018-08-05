@@ -1,9 +1,9 @@
 <template>
     <b-card>
-      <h1>Stackoverflow Metric</h1>
+      <h1>Softskill Metric</h1>
       <input v-model="soID" placeholder="Type in the Stackoverflow ID">
       <p>User is: {{ soID }}</p>
-      <button v-on:click="onClick(soID)">get User</button>
+      <button v-on:click="onClick(soID)">get Stackoverflow User</button>
       <hr/>
       <h2>CommunicationScore is: {{soUser.reputation}}</h2>
     </b-card>

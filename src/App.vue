@@ -1,20 +1,20 @@
 <template>
-<div class="box" id="app">
+<div id="app">
   <!-- <img src="./assets/logo.png"> -->
   <!-- <router-link :to="{ name: 'Test' }">Test</router-link>
   <router-link :to="{ name: 'Profile' }">Profile</router-link>
   <router-view/> -->
-  <Hello/>
+  <Main/>
 </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import Main from './components/Main'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    Main
   }
 }
 </script>
@@ -25,9 +25,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+
 }
 .box {
-  margin:25px
+  background-color: #c1c1c1;
+  padding: 25px;
 }
 </style>

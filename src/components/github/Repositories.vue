@@ -13,7 +13,11 @@
         <b-card>
           <div v-for="met in row.item.repoMetrics">
           {{met[0]}}:
-          <Bar v-if="met[1].mapping != null" :data = "met[1].mapping" :height="50"/>
+          <div  v-if="met[1].mapping != null">
+            <Bar :data = "met[1].mapping" :height="50"/>
+          <!-- The score is: met[1].mapping[0] -->
+          Score (in %): {{calcQualityScore(met[1].mapping)}}
+        </div>
           <a v-else>{{met[1]}}</a>
         </div>
           <!-- {{row.item.repoMetrics}} -->
@@ -44,6 +48,10 @@ export default {
   methods: {
     analyzeRepo(repoURL){
       this.$store.dispatch('FETCH_TEAMSCALE_REPO', repoURL)
+    },
+    calcQualityScore(qualityScores){
+      var total = qualityScores[0] + qualityScores[2] * 1.5 + qualityScores[3] * 3
+      return Math.round((qualityScores[0]/total)*100)
     }
   }
 }

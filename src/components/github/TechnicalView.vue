@@ -1,9 +1,9 @@
 <template>
   <b-card>
-    <h1>GithubMetric</h1>
+    <h1>Technical Metric</h1>
     <input v-model="githubName" placeholder="Type in Name">
     <p>User is: {{ githubName }}</p>
-    <button v-on:click="onClick(githubName)">get User</button>
+    <button v-on:click="onClick(githubName)">get Github User</button>
     <hr/>
     <h2>TechnicalScore is: {{metric.simpleMetric}}</h2>
     <LineChart :name="githubName" :data="metric.splittedMetric" :options="{responsive: true, maintainAspectRatio: false}" :height="50"/>

@@ -1,25 +1,26 @@
 <template>
-<div class="hello">
-  <StackoverflowView/>
+<div class ="box">
+  <CommunicationView/>
   <br/>
-  <GithubView/>
+  <TechnicalView/>
 </div>
 </template>
 
 <script>
-import GithubView from './github/GithubView'
-import StackoverflowView from './stackoverflow/StackoverflowView'
+import TechnicalView from './github/TechnicalView'
+import CommunicationView from './stackoverflow/CommunicationView'
 
 export default {
   components:{
-    GithubView,
-    StackoverflowView
+    TechnicalView,
+    CommunicationView
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 h1,
 h2 {
   font-weight: normal;
