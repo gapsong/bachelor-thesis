@@ -50,8 +50,4 @@ router.get('/github/:uid/issues', githubController.getIssues)
 
 router.get('/github/:uid/comments', githubController.getComments)
 
-// router.get('/github/:uid/pullrequests', githubController.pullrequests)
-//
-// router.get('/github/:uid/codequality', githubController.codequality)
-
 module.exports = router
