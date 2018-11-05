@@ -1,6 +1,7 @@
-# vue-ba
+# Bachelorthesis: 
 
-> bachelorproject
+> This tool is able to rate your Githubprofil based on a predefined metric. 
+Bachelorthesis: A tool for automatic skillset validation based on publicly accessible information
 
 ## Build Setup
 
@@ -16,3 +17,5 @@ npm run build
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+
